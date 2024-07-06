@@ -41,16 +41,16 @@ date_details as (
         extract(month from d) as month,
         format_date('%B', d) as month_name,
         format_date('%A', d) as day_name,
+        case -- Sorting column for the weekday column in Power BI
+            when format_date('%A', d) = 'Monday' then 1
+            when format_date('%A', d) = 'Tuesday' then 2
+            when format_date('%A', d) = 'Wednesday' then 3
+            when format_date('%A', d) = 'Thursday' then 4
+            when format_date('%A', d) = 'Friday' then 5
+            when format_date('%A', d) = 'Saturday' then 6
+            when format_date('%A', d) = 'Sunday' then 7
+        end as day_name_order,
         not (format_date('%A', d) in ('Sunday', 'Saturday')) as day_is_weekday,
-        case
-            when format_date('%A', d) = 'Monday' then '1) monday'
-            when format_date('%A', d) = 'Tuesday' then '2) tuesday'
-            when format_date('%A', d) = 'Wednesday' then '3) wednesday'
-            when format_date('%A', d) = 'Thursday' then '4) thursday'
-            when format_date('%A', d) = 'Friday' then '5) friday'
-            when format_date('%A', d) = 'Saturday' then '6) saturday'
-            when format_date('%A', d) = 'Sunday' then '7) sunday'
-        end as weekday,
         
         -- Custom quarter start date calculation (shifted by one month for improved planning cycles)
         case
